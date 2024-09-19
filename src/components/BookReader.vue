@@ -26,7 +26,6 @@
       const books = ref([
         { 
           title: 'Pride and Prejudice by Jane Austen', 
-        //   url: 'https://www.planetebook.com/free-ebooks/pride-and-prejudice.pdf'
           url: '/Users/peterachieng/Downloads/pride-and-prejudice.pdf'
         },
         { 
