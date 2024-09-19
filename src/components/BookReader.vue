@@ -5,35 +5,39 @@
         <button @click="previousBook" :disabled="currentBookIndex === 0">Previous Book</button>
         <button @click="nextBook" :disabled="currentBookIndex === books.length - 1">Next Book</button>
       </div>
-      <PDFViewer
+      <VuePdfEmbed
+        v-if="currentBook.url"
         :source="currentBook.url"
-        style="height: 80vh; width: 100%"
-        @download="handleDownload"
+        :page="1"
+        :style="{ width: '100%', height: '80vh' }"
+        @error="handleError"
       />
+      <p v-if="errorMessage">{{ errorMessage }}</p>
     </div>
   </template>
   
   <script>
   import { ref, computed } from 'vue'
-  import PDFViewer from 'pdf-viewer-vue'
+  import VuePdfEmbed from 'vue-pdf-embed'
   
   export default {
     name: 'BookReader',
     components: {
-      PDFViewer
+      VuePdfEmbed
     },
     setup() {
       const books = ref([
         { 
           title: 'Pride and Prejudice by Jane Austen', 
-          url: '/pride-and-prejudice.pdf'
+          url: '/pdfs/pride-and-prejudice.pdf'
         },
         { 
           title: 'The Adventures of Sherlock Holmes by Arthur Conan Doyle', 
-          url: '/sherlock-holm.es/stories/pdf/a4/1-sided/advs.pdf'
+          url: '/pdfs/advs.pdf'
         }
       ])
       const currentBookIndex = ref(0)
+      const errorMessage = ref('')
   
       const currentBook = computed(() => books.value[currentBookIndex.value])
       const bookTitle = computed(() => currentBook.value.title)
@@ -41,17 +45,20 @@
       const nextBook = () => {
         if (currentBookIndex.value < books.value.length - 1) {
           currentBookIndex.value++
+          errorMessage.value = ''
         }
       }
   
       const previousBook = () => {
         if (currentBookIndex.value > 0) {
           currentBookIndex.value--
+          errorMessage.value = ''
         }
       }
   
-      const handleDownload = (data) => {
-        console.log('Download requested:', data)
+      const handleError = (error) => {
+        console.error('PDF loading error:', error)
+        errorMessage.value = `Failed to load PDF: ${error}`
       }
   
       return {
@@ -61,7 +68,8 @@
         bookTitle,
         nextBook,
         previousBook,
-        handleDownload
+        errorMessage,
+        handleError
       }
     }
   }
