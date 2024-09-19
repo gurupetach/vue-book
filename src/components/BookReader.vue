@@ -26,23 +26,11 @@
       const books = ref([
         { 
           title: 'Pride and Prejudice by Jane Austen', 
-          url: '/Users/peterachieng/Downloads/pride-and-prejudice.pdf'
+          url: '/pride-and-prejudice.pdf'
         },
         { 
           title: 'The Adventures of Sherlock Holmes by Arthur Conan Doyle', 
-          url: 'https://sherlock-holm.es/stories/pdf/a4/1-sided/advs.pdf'
-        },
-        { 
-          title: 'The Great Gatsby by F. Scott Fitzgerald', 
-          url: 'https://www.planetebook.com/free-ebooks/the-great-gatsby.pdf'
-        },
-        { 
-          title: 'Frankenstein by Mary Shelley', 
-          url: 'https://www.planetebook.com/free-ebooks/frankenstein.pdf'
-        },
-        { 
-          title: 'The War of the Worlds by H.G. Wells', 
-          url: 'https://www.planetebook.com/free-ebooks/the-war-of-the-worlds.pdf'
+          url: '/sherlock-holm.es/stories/pdf/a4/1-sided/advs.pdf'
         }
       ])
       const currentBookIndex = ref(0)
