@@ -5,10 +5,12 @@
         <button @click="previousBook" :disabled="currentBookIndex === 0">Previous Book</button>
         <button @click="nextBook" :disabled="currentBookIndex === books.length - 1">Next Book</button>
       </div>
-      <PDFViewer
+      <VuePdfEmbed
         v-if="currentBook.url"
         :source="currentBook.url"
-        style="height: 80vh; width: 100%"
+        :page="1"
+        :style="{ width: '100%', height: '80vh' }"
+        @error="handleError"
       />
       <p v-if="errorMessage">{{ errorMessage }}</p>
     </div>
@@ -16,9 +18,13 @@
   
   <script>
   import { ref, computed } from 'vue'
+  import VuePdfEmbed from 'vue-pdf-embed'
   
   export default {
     name: 'BookReader',
+    components: {
+      VuePdfEmbed
+    },
     setup() {
       const books = ref([
         { 
@@ -26,12 +32,8 @@
           url: '/pdfs/pride-and-prejudice.pdf'
         },
         { 
-          title: 'The Adventures of Sherlock Holmes', 
+          title: 'The Adventures of Sherlock Holmes by Arthur Conan Doyle', 
           url: '/pdfs/advs.pdf'
-        },
-        { 
-          title: 'Ttest', 
-          url: '/pdfs/341.pdf'
         }
       ])
       const currentBookIndex = ref(0)
@@ -54,6 +56,11 @@
         }
       }
   
+      const handleError = (error) => {
+        console.error('PDF loading error:', error)
+        errorMessage.value = `Failed to load PDF: ${error}`
+      }
+  
       return {
         books,
         currentBookIndex,
@@ -61,7 +68,8 @@
         bookTitle,
         nextBook,
         previousBook,
-        errorMessage
+        errorMessage,
+        handleError
       }
     }
   }
